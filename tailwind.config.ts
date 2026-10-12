@@ -37,7 +37,7 @@ const config: Config = {
         display: ["var(--font-display)", "ui-serif", "Georgia", "serif"],
       },
       maxWidth: {
-        site: "80rem",
+        site: "90rem",
       },
       keyframes: {
         kenburns: {

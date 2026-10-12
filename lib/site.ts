@@ -36,9 +36,9 @@ export const site = {
   serviceHighlights: ["Free Estimates", "Competitive Rates", "Quality Workmanship"],
 
   hours: [
-    { days: "Monday – Friday", time: "[ADD: weekday hours]" },
-    { days: "Saturday", time: "[ADD: Saturday hours]" },
-    { days: "Sunday", time: "[ADD: Sunday hours]" },
+    { days: "Monday – Friday", time: "7:30 am – 7:30 pm" },
+    { days: "Saturday", time: "9 am – 5 pm" },
+    { days: "Sunday", time: "Closed" },
   ],
 
   instagram: {
