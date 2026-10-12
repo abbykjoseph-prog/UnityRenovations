@@ -3,6 +3,7 @@ import { Fraunces, Inter } from "next/font/google";
 import { site } from "@/lib/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { LocalBusinessJsonLd } from "@/components/seo/LocalBusinessJsonLd";
 import "./globals.css";
 
 const display = Fraunces({
@@ -26,14 +27,6 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
-  openGraph: {
-    type: "website",
-    locale: "en_CA",
-    siteName: site.name,
-    url: "/",
-  },
-  twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/" },
 };
 
 export const viewport: Viewport = {
@@ -53,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </main>
         <Footer />
+        <LocalBusinessJsonLd />
       </body>
     </html>
   );

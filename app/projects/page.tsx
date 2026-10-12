@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { heroPhotos, projectPhotos } from "@/lib/photos";
 import { site } from "@/lib/site";
 import { PageHero } from "@/components/PageHero";
@@ -6,12 +7,11 @@ import { Gallery } from "@/components/projects/Gallery";
 import { CtaBand } from "@/components/CtaBand";
 import { Container } from "@/components/ui/Container";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Projects",
   description: `Photos of kitchens, bathrooms, additions, finish carpentry, exterior and commercial work by ${site.name} across the ${site.serviceArea}.`,
-  alternates: { canonical: "/projects" },
-  openGraph: { url: "/projects", title: `Projects | ${site.name}` },
-};
+  path: "/projects",
+});
 
 export default function ProjectsPage() {
   return (

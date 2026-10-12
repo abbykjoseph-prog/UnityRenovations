@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { services } from "@/lib/services";
 import { heroPhotos } from "@/lib/photos";
@@ -12,12 +13,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CalendarIcon, LedgerIcon } from "@/components/ui/Icons";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Renovation & Construction Services",
   description: `Basement finishing, kitchen and bathroom remodels, whole-home renovations, additions, rebuilds and custom homes built from the foundation up, across the ${site.serviceArea}.`,
-  alternates: { canonical: "/services" },
-  openGraph: { url: "/services", title: `Services | ${site.name}` },
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (

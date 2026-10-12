@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { heroPhotos } from "@/lib/photos";
 import { site } from "@/lib/site";
 import { PageHero } from "@/components/PageHero";
@@ -6,12 +7,11 @@ import { QuoteForm } from "@/components/contact/QuoteForm";
 import { Container } from "@/components/ui/Container";
 import { ClockIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact Us for a Free Quote",
   description: `Request a free renovation or construction estimate from ${site.name}. Call ${site.phone} or send us the details of your project. Serving the ${site.serviceArea}.`,
-  alternates: { canonical: "/contact" },
-  openGraph: { url: "/contact", title: `Contact | ${site.name}` },
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

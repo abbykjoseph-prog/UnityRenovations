@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Image from "next/image";
 import { heroPhotos } from "@/lib/photos";
 import { promises } from "@/lib/content";
@@ -12,12 +13,11 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About Us",
   description: `${site.legalName} is a renovation and construction company serving the ${site.serviceArea}, built on flawless workmanship, quality materials and respect for every client's home.`,
-  alternates: { canonical: "/about" },
-  openGraph: { url: "/about", title: `About | ${site.name}` },
-};
+  path: "/about",
+});
 
 const facts = [
   { label: "Service area", value: site.serviceArea },

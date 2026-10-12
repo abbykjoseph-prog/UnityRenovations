@@ -1,3 +1,6 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
+import { site } from "@/lib/site";
 import { Hero } from "@/components/home/Hero";
 import { Intro } from "@/components/home/Intro";
 import { WhyUnity } from "@/components/home/WhyUnity";
@@ -11,6 +14,12 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
+
+export const metadata: Metadata = pageMetadata({
+  title: `${site.name} | Renovations & Custom Builds in the ${site.serviceArea}`,
+  description: site.description,
+  path: "/",
+});
 
 export default function HomePage() {
   return (
