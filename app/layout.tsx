@@ -4,6 +4,7 @@ import { site } from "@/lib/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LocalBusinessJsonLd } from "@/components/seo/LocalBusinessJsonLd";
+import { CookieNotice } from "@/components/CookieNotice";
 import "./globals.css";
 
 const display = Fraunces({
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </main>
         <Footer />
+        <CookieNotice />
         <LocalBusinessJsonLd />
       </body>
     </html>

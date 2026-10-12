@@ -99,7 +99,7 @@ export function Hero() {
             From basement finishing to custom homes built from the foundation up. Flawless workmanship, quality materials,
             and a schedule and budget we stand behind.
           </p>
-          <div className="mt-9 flex flex-col gap-3 [text-shadow:none] sm:flex-row sm:items-center">
+          <div data-cookie-avoid className="mt-9 flex flex-col gap-3 [text-shadow:none] sm:flex-row sm:items-center">
             <ButtonLink href={QUOTE_HREF} size="lg">
               Get a Free Quote
             </ButtonLink>

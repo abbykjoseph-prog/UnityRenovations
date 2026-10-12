@@ -86,6 +86,18 @@ export function Footer() {
           <p>
             © {year} {site.legalName} All rights reserved.
           </p>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            <li>
+              <Link href="/privacy" className="text-paper/85 underline-offset-4 hover:text-white hover:underline">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms" className="text-paper/85 underline-offset-4 hover:text-white hover:underline">
+                Terms &amp; Conditions
+              </Link>
+            </li>
+          </ul>
           <p>{site.tagline}</p>
         </Container>
       </div>

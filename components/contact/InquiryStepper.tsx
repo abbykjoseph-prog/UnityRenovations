@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useReducer, useRef, type ComponentType, type ReactNode, type SVGProps } from "react";
 import {
@@ -545,11 +546,19 @@ function Review({
         </div>
       )}
 
+      <p className="mt-6 text-sm text-muted">
+        By sending, you agree to our{" "}
+        <Link href="/privacy" className="font-medium text-accent-dark underline underline-offset-4 hover:text-ink">
+          Privacy Policy
+        </Link>
+        .
+      </p>
+
       <button
         type="button"
         onClick={onSend}
         disabled={status === "submitting"}
-        className={buttonClasses("primary", "lg", "mt-8 w-full sm:w-auto")}
+        className={buttonClasses("primary", "lg", "mt-4 w-full sm:w-auto")}
       >
         {status === "submitting" ? "Sending…" : status === "error" ? "Try again" : "Send"}
         {status !== "submitting" && <ArrowRightIcon />}

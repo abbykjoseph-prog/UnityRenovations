@@ -41,6 +41,23 @@
   }
 }
 
+/* Long-form text on the Privacy Policy and Terms pages */
+.legal-prose {
+  @apply text-lg leading-relaxed text-ink/85;
+}
+.legal-prose > * + * {
+  @apply mt-4;
+}
+.legal-prose ul {
+  @apply list-disc space-y-2 pl-6 marker:text-accent;
+}
+.legal-prose a {
+  @apply font-medium text-accent-dark underline underline-offset-4 hover:text-ink;
+}
+.legal-prose strong {
+  @apply font-semibold text-ink;
+}
+
 /* Contact stepper: each new step slides in from the direction of travel */
 @keyframes step-in-forward {
   from {
@@ -59,6 +76,23 @@
 }
 .step-in-back {
   animation: step-in-back 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Cookie notice: slides up from the bottom edge (instant under reduced motion) */
+.cookie-notice {
+  transition:
+    transform 450ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 300ms ease,
+    visibility 0s linear 0s;
+}
+.cookie-notice[data-state="hidden"] {
+  transform: translate3d(0, calc(100% + 1.5rem), 0);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 300ms ease-in,
+    opacity 200ms ease-in,
+    visibility 0s linear 300ms;
 }
 
 /* Scroll reveal: content is only hidden when JS is running and motion is allowed. */
