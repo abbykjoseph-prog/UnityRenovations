@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { HONEYPOT_FIELD } from "@/lib/inquiry";
 import { formatInquiryEmail, parseInquiry } from "@/lib/inquiry-schema";
 import { clientIp, verifyTurnstile } from "@/lib/turnstile";
+import { sendInquiryEmail } from "@/lib/email";
 import { TURNSTILE_FIELD } from "@/lib/turnstile-config";
 
 const MAX_BODY_BYTES = 20_000;
@@ -47,31 +48,26 @@ export async function POST(request: Request) {
   }
 
   const inquiry = result.data;
-  const { subject, text } = formatInquiryEmail(inquiry);
+  const { subject, text, html } = formatInquiryEmail(inquiry);
 
-  // For now, submissions are logged (visible in the Vercel function logs).
-  console.info(`[contact] ${subject}\n${text}`);
+  const sent = await sendInquiryEmail({
+    subject,
+    text,
+    html,
+    // Replies go straight to the visitor when they asked to be contacted by email
+    replyTo: inquiry.contactMethod === "email" ? inquiry.email : undefined,
+  });
 
-  // TODO(email): Send the submission with Resend.
-  //   1. npm install resend
-  //   2. Add RESEND_API_KEY (and optionally CONTACT_TO_EMAIL) in Vercel → Project → Settings → Environment Variables
-  //   3. Verify the unityrenovations.ca domain in Resend so mail can be sent from it
-  //   4. Replace this comment with something like:
-  //
-  //   import { Resend } from "resend";
-  //   import { site } from "@/lib/site";
-  //   const resend = new Resend(process.env.RESEND_API_KEY);
-  //   const { error } = await resend.emails.send({
-  //     from: "Unity Renovations Website <inquiries@unityrenovations.ca>",
-  //     to: process.env.CONTACT_TO_EMAIL ?? site.email,
-  //     ...(inquiry.contactMethod === "email" && { replyTo: inquiry.email }),
-  //     subject,
-  //     text,
-  //   });
-  //   if (error) {
-  //     console.error("[contact] Resend error", error);
-  //     return NextResponse.json({ ok: false, error: "We couldn't send your message." }, { status: 502 });
-  //   }
+  if (!sent.ok) {
+    // Log what went wrong (variable names / Resend's error), never key values or the visitor's details
+    if (sent.reason === "not-configured") {
+      console.error("[contact] Email not sent: missing environment variables", sent.missing);
+      return NextResponse.json({ ok: false, error: "email-unavailable" }, { status: 503 });
+    }
+    console.error("[contact] Email not sent: Resend error", sent.detail);
+    return NextResponse.json({ ok: false, error: "send-failed" }, { status: 502 });
+  }
 
+  console.info("[contact] Inquiry emailed", { id: sent.id, path: inquiry.path });
   return NextResponse.json({ ok: true });
 }

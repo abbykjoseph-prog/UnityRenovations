@@ -109,7 +109,8 @@ export function InquiryStepper() {
       if (res.ok && json.ok) return act({ type: "submitSuccess" });
       if (json.errors) return act({ type: "serverErrors", errors: json.errors });
       if (json.error === "verification-failed") return act({ type: "submitError", reason: "verification" });
-      if (json.error === "verification-unavailable") return act({ type: "submitError", reason: "unavailable" });
+      if (json.error === "verification-unavailable" || json.error === "email-unavailable")
+        return act({ type: "submitError", reason: "unavailable" });
       act({ type: "submitError" });
     } catch {
       act({ type: "submitError" });

@@ -16,7 +16,7 @@ Marketing site for Unity Renovations Inc. Built with Next.js 14 (App Router), Ty
 
 ## Contact form
 
-The contact page is a step-by-step module (`components/contact/InquiryStepper.tsx`). Link to `/contact?path=project` to open it on the project questions (add `&type=kitchen` etc. to preselect a project type). `app/api/contact/route.ts` validates submissions with zod, filters spam (honeypot plus minimum fill time) and logs a formatted email (subject and body) to the server logs. There's a `TODO(email)` in that file with the steps for sending through Resend.
+The contact page is a step-by-step module (`components/contact/InquiryStepper.tsx`). Link to `/contact?path=project` to open it on the project questions (add `&type=kitchen` etc. to preselect a project type). `app/api/contact/route.ts` validates submissions with zod, filters spam (honeypot plus minimum fill time) and emails each submission through Resend (HTML with a plain-text fallback), using `RESEND_API_KEY`, `FROM_EMAIL` and `CONTACT_TO_EMAIL`. See `.env.example`.
 
 ## Development
 

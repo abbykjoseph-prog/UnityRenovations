@@ -90,52 +90,97 @@ export function parseInquiry(body: unknown) {
   return { ok: false as const, errors };
 }
 
-/** A clear subject line and a plain-text body that reads well in any inbox. */
+const escapeHtml = (value: string) =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+/**
+ * Subject line plus a clean HTML email and a plain-text fallback, listing every answer.
+ * When the visitor chose phone, the number is shown prominently at the top.
+ */
 export function formatInquiryEmail(inquiry: Inquiry, receivedAt = new Date()) {
-  const contactLine =
-    inquiry.contactMethod === "email" ? `Email: ${inquiry.email}` : `Phone: ${inquiry.phone}`;
   const when = receivedAt.toLocaleString("en-CA", {
     timeZone: "America/Toronto",
     dateStyle: "medium",
     timeStyle: "short",
   });
+  const prefers = inquiry.contactMethod === "email" ? "Email" : "Phone";
+  const contactValue = inquiry.contactMethod === "email" ? inquiry.email : inquiry.phone;
+
+  let subject: string;
+  let heading: string;
+  const rows: [string, string][] = [];
 
   if (inquiry.path === "contact") {
-    const subject = `New contact request from ${inquiry.name}`;
-    const text = [
-      subject,
-      "",
-      `Name: ${inquiry.name}`,
-      `Prefers: ${inquiry.contactMethod === "email" ? "Email" : "Phone"}`,
-      contactLine,
-      "",
-      "Message:",
-      inquiry.message,
-      "",
-      `Received: ${when} (Toronto time)`,
-    ].join("\n");
-    return { subject, text };
+    subject = `New contact request from ${inquiry.name}`;
+    heading = "New contact request";
+    rows.push(["Reason", "I need to reach you"]);
+  } else {
+    const type = labelFor(projectTypes, inquiry.projectType);
+    const budget = inquiry.hasBudget && inquiry.budgetRange ? labelFor(budgetRanges, inquiry.budgetRange) : "No budget set";
+    const timeline = labelFor(timelines, inquiry.timeline);
+    subject = `New project inquiry: ${type} — ${budget} — ${timeline}`;
+    heading = "New project inquiry";
+    rows.push(
+      ["Reason", "I have a project in mind"],
+      ["Project type", type],
+      ["Budget", inquiry.hasBudget ? budget : "No budget in mind yet"],
+      ["Timeline", timeline],
+    );
   }
+  rows.push(["Name", inquiry.name], ["Prefers", prefers], [prefers, contactValue]);
+  const message = inquiry.message || "(none)";
 
-  const type = labelFor(projectTypes, inquiry.projectType);
-  const budget = inquiry.hasBudget && inquiry.budgetRange ? labelFor(budgetRanges, inquiry.budgetRange) : "No budget set";
-  const timeline = labelFor(timelines, inquiry.timeline);
-  const subject = `New project inquiry: ${type} — ${budget} — ${timeline}`;
   const text = [
-    "New project inquiry",
+    heading,
     "",
-    `Project type: ${type}`,
-    `Budget: ${inquiry.hasBudget ? budget : "No budget in mind yet"}`,
-    `Timeline: ${timeline}`,
-    "",
-    `Name: ${inquiry.name}`,
-    `Prefers: ${inquiry.contactMethod === "email" ? "Email" : "Phone"}`,
-    contactLine,
+    ...(inquiry.contactMethod === "phone" ? [`CALL BACK: ${inquiry.phone}`, ""] : []),
+    ...rows.map(([label, value]) => `${label}: ${value}`),
     "",
     "Message:",
-    inquiry.message || "(none)",
+    message,
     "",
     `Received: ${when} (Toronto time)`,
   ].join("\n");
-  return { subject, text };
+
+  const callout =
+    inquiry.contactMethod === "phone"
+      ? `<tr><td style="padding:0 32px 24px"><div style="background:#0077B6;border-radius:4px;padding:16px 20px;color:#ffffff">
+          <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.85">Prefers a phone call</div>
+          <a href="tel:+1${inquiry.phone.replace(/\D/g, "")}" style="display:block;margin-top:4px;font-size:26px;font-weight:700;color:#ffffff;text-decoration:none">${escapeHtml(inquiry.phone)}</a>
+        </div></td></tr>`
+      : "";
+
+  const rowHtml = rows
+    .map(([label, value]) => {
+      const shown =
+        label === "Email"
+          ? `<a href="mailto:${escapeHtml(value)}" style="color:#00699F">${escapeHtml(value)}</a>`
+          : label === "Phone"
+            ? `<a href="tel:+1${value.replace(/\D/g, "")}" style="color:#00699F">${escapeHtml(value)}</a>`
+            : escapeHtml(value);
+      return `<tr>
+        <td style="padding:10px 0;border-bottom:1px solid #EEE9E1;width:140px;vertical-align:top;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#5A5E66">${escapeHtml(label)}</td>
+        <td style="padding:10px 0;border-bottom:1px solid #EEE9E1;font-size:16px;color:#14161B">${shown}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const html = `<!doctype html>
+<html lang="en-CA"><body style="margin:0;padding:24px 12px;background:#F6F3EE;font-family:Arial,Helvetica,sans-serif">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:6px;border:1px solid #EEE9E1">
+    <tr><td style="padding:28px 32px 20px">
+      <div style="font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#00699F">Unity Renovations website</div>
+      <h1 style="margin:6px 0 0;font-family:Georgia,serif;font-size:24px;font-weight:normal;color:#14161B">${escapeHtml(heading)}</h1>
+    </td></tr>
+    ${callout}
+    <tr><td style="padding:0 32px">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rowHtml}</table>
+    </td></tr>
+    <tr><td style="padding:20px 32px 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#5A5E66">Message</td></tr>
+    <tr><td style="padding:0 32px 24px;font-size:16px;line-height:1.5;color:#14161B;white-space:pre-wrap">${escapeHtml(message)}</td></tr>
+    <tr><td style="padding:16px 32px 24px;border-top:1px solid #EEE9E1;font-size:12px;color:#5A5E66">Received ${escapeHtml(when)} (Toronto time) via the contact form on www.unityrenovations.ca</td></tr>
+  </table>
+</body></html>`;
+
+  return { subject, text, html };
 }
