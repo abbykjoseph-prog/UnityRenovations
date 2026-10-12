@@ -605,42 +605,26 @@ function Review({
         </div>
       )}
 
-      <div className="mt-8">
-        {turnstileSiteKey ? (
-          <Turnstile
-            ref={turnstileRef}
-            siteKey={turnstileSiteKey}
-            options={{ theme: "auto", size: "compact", refreshExpired: "manual" }}
-            onSuccess={(t) => {
-              errorCount.current = 0;
-              setToken(t);
-              setCheckMessage(null);
-            }}
-            onExpire={() => restartCheck("The security check timed out. Please complete it again.")}
-            onError={handleCheckError}
-            onTimeout={() => restartCheck("The security check timed out. Please complete it again.")}
-          />
-        ) : (
-          <p className="rounded-sm border border-ink/15 bg-white p-4 text-sm">
-            Online sending is temporarily unavailable. Please call{" "}
-            <a href={site.phoneHref} className="font-semibold underline">
-              {site.phone}
-            </a>{" "}
-            or email{" "}
-            <a href={`mailto:${site.email}`} className="font-semibold underline">
-              {site.email}
-            </a>
-            .
-          </p>
-        )}
-        <div className="mt-2 min-h-[1.25rem] text-sm" aria-live="polite">
-          {checkBlocked ? (
-            <p className="text-red-700">
-              The security check isn&rsquo;t loading right now.{" "}
-              <button type="button" onClick={retryCheck} className="font-semibold underline underline-offset-4">
-                Try again
-              </button>
-              , or call{" "}
+      {/* Bot check on the left; privacy note and Send on the right (stacked on mobile) */}
+      <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
+        <div className="shrink-0">
+          {turnstileSiteKey ? (
+            <Turnstile
+              ref={turnstileRef}
+              siteKey={turnstileSiteKey}
+              options={{ theme: "auto", size: "compact", refreshExpired: "manual" }}
+              onSuccess={(t) => {
+                errorCount.current = 0;
+                setToken(t);
+                setCheckMessage(null);
+              }}
+              onExpire={() => restartCheck("The security check timed out. Please complete it again.")}
+              onError={handleCheckError}
+              onTimeout={() => restartCheck("The security check timed out. Please complete it again.")}
+            />
+          ) : (
+            <p className="rounded-sm border border-ink/15 bg-white p-4 text-sm">
+              Online sending is temporarily unavailable. Please call{" "}
               <a href={site.phoneHref} className="font-semibold underline">
                 {site.phone}
               </a>{" "}
@@ -650,35 +634,55 @@ function Review({
               </a>
               .
             </p>
-          ) : (
-            checkMessage && <p className="text-red-700">{checkMessage}</p>
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm text-muted">
+            By sending, you agree to our{" "}
+            <Link href="/privacy" className="font-medium text-accent-dark underline underline-offset-4 hover:text-ink">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+
+          <button
+            type="button"
+            onClick={() => token && onSend(token)}
+            disabled={status === "submitting" || !token}
+            aria-describedby={!token ? "send-hint" : undefined}
+            className={buttonClasses("primary", "lg", "mt-3 w-full sm:w-auto")}
+          >
+            {status === "submitting" ? "Sending…" : status === "error" ? "Try again" : "Send"}
+            {status !== "submitting" && <ArrowRightIcon />}
+          </button>
+          {!token && status !== "submitting" && turnstileSiteKey && (
+            <p id="send-hint" className="mt-2 text-sm text-muted">
+              Complete the security check to send.
+            </p>
           )}
         </div>
       </div>
-
-      <p className="mt-4 text-sm text-muted">
-        By sending, you agree to our{" "}
-        <Link href="/privacy" className="font-medium text-accent-dark underline underline-offset-4 hover:text-ink">
-          Privacy Policy
-        </Link>
-        .
-      </p>
-
-      <button
-        type="button"
-        onClick={() => token && onSend(token)}
-        disabled={status === "submitting" || !token}
-        aria-describedby={!token ? "send-hint" : undefined}
-        className={buttonClasses("primary", "lg", "mt-4 w-full sm:w-auto")}
-      >
-        {status === "submitting" ? "Sending…" : status === "error" ? "Try again" : "Send"}
-        {status !== "submitting" && <ArrowRightIcon />}
-      </button>
-      {!token && status !== "submitting" && turnstileSiteKey && (
-        <p id="send-hint" className="mt-2 text-sm text-muted">
-          Complete the security check above to send.
-        </p>
-      )}
+      <div className="mt-3 min-h-[1.25rem] text-sm" aria-live="polite">
+        {checkBlocked ? (
+          <p className="text-red-700">
+            The security check isn&rsquo;t loading right now.{" "}
+            <button type="button" onClick={retryCheck} className="font-semibold underline underline-offset-4">
+              Try again
+            </button>
+            , or call{" "}
+            <a href={site.phoneHref} className="font-semibold underline">
+              {site.phone}
+            </a>{" "}
+            or email{" "}
+            <a href={`mailto:${site.email}`} className="font-semibold underline">
+              {site.email}
+            </a>
+            .
+          </p>
+        ) : (
+          checkMessage && <p className="text-red-700">{checkMessage}</p>
+        )}
+      </div>
     </div>
   );
 }
