@@ -22,6 +22,8 @@ export type InquiryState = {
   status: Status;
   /** Why the last send failed, so the review step can show the right message */
   errorReason: "verification" | "unavailable" | "general" | null;
+  /** Whether the server also emailed the visitor a confirmation */
+  confirmationSent: boolean;
 };
 
 export type InquiryAction =
@@ -32,7 +34,7 @@ export type InquiryAction =
   | { type: "edit"; step: StepId }
   | { type: "startProject"; projectType?: ProjectType }
   | { type: "submitStart" }
-  | { type: "submitSuccess" }
+  | { type: "submitSuccess"; confirmationSent: boolean }
   | { type: "submitError"; reason?: "verification" | "unavailable" }
   | { type: "serverErrors"; errors: Record<string, string> };
 
@@ -40,7 +42,7 @@ export function initialInquiryState(opts?: { project?: boolean; projectType?: Pr
   const data: InquiryData = opts?.project
     ? { ...emptyInquiry, path: "project", projectType: opts.projectType ?? null }
     : emptyInquiry;
-  return { data, step: opts?.project ? "projectType" : "path", direction: "forward", editing: false, errors: {}, status: "idle", errorReason: null };
+  return { data, step: opts?.project ? "projectType" : "path", direction: "forward", editing: false, errors: {}, status: "idle", errorReason: null, confirmationSent: false };
 }
 
 function nextStep(state: InquiryState, data: InquiryData): StepId {
@@ -114,7 +116,7 @@ export function inquiryReducer(state: InquiryState, action: InquiryAction): Inqu
     case "submitStart":
       return { ...state, status: "submitting", errorReason: null };
     case "submitSuccess":
-      return { ...state, status: "success" };
+      return { ...state, status: "success", confirmationSent: action.confirmationSent };
     case "submitError":
       return { ...state, status: "error", errorReason: action.reason ?? "general" };
 

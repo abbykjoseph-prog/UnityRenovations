@@ -105,8 +105,13 @@ export function InquiryStepper() {
           [TURNSTILE_FIELD]: turnstileToken,
         }),
       });
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; errors?: Record<string, string> };
-      if (res.ok && json.ok) return act({ type: "submitSuccess" });
+      const json = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        confirmationSent?: boolean;
+        error?: string;
+        errors?: Record<string, string>;
+      };
+      if (res.ok && json.ok) return act({ type: "submitSuccess", confirmationSent: json.confirmationSent === true });
       if (json.errors) return act({ type: "serverErrors", errors: json.errors });
       if (json.error === "verification-failed") return act({ type: "submitError", reason: "verification" });
       if (json.error === "verification-unavailable" || json.error === "email-unavailable")
@@ -131,6 +136,9 @@ export function InquiryStepper() {
           <h2 id="inquiry-heading" ref={headingRef} tabIndex={-1} className="mt-6 text-3xl font-medium focus:outline-none sm:text-4xl">
             Thanks, {data.name.trim().split(/\s+/)[0]}! We&rsquo;ll be in touch within 1 business day.
           </h2>
+          {state.confirmationSent && (
+            <p className="mt-4 text-lg leading-relaxed text-paper">We&rsquo;ve also sent a confirmation to your email.</p>
+          )}
           <p className="mt-4 text-lg leading-relaxed text-muted-dark">
             In the meantime, see our latest work on Instagram.
           </p>

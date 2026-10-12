@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { HONEYPOT_FIELD } from "@/lib/inquiry";
 import { formatInquiryEmail, parseInquiry } from "@/lib/inquiry-schema";
 import { clientIp, verifyTurnstile } from "@/lib/turnstile";
-import { sendInquiryEmail } from "@/lib/email";
+import { sendConfirmationEmail, sendInquiryEmail } from "@/lib/email";
+import { formatConfirmationEmail } from "@/lib/confirmation-email";
 import { TURNSTILE_FIELD } from "@/lib/turnstile-config";
 
 const MAX_BODY_BYTES = 20_000;
@@ -69,5 +70,18 @@ export async function POST(request: Request) {
   }
 
   console.info("[contact] Inquiry emailed", { id: sent.id, path: inquiry.path });
-  return NextResponse.json({ ok: true });
+
+  // The inquiry is through. Confirm to the visitor only if they chose email; a failure here
+  // is logged but never shown to them.
+  let confirmationSent = false;
+  if (inquiry.contactMethod === "email") {
+    const confirmation = await sendConfirmationEmail(inquiry.email, formatConfirmationEmail(inquiry));
+    confirmationSent = confirmation.ok;
+    if (!confirmation.ok) {
+      const detail = confirmation.reason === "send-failed" ? confirmation.detail : `missing ${confirmation.missing.join(", ")}`;
+      console.error("[contact] Confirmation not sent", detail);
+    }
+  }
+
+  return NextResponse.json({ ok: true, confirmationSent });
 }
