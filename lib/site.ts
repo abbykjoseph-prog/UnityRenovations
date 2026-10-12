@@ -12,13 +12,6 @@ export function isPlaceholder(value: string | undefined | null): boolean {
   return !value || value.trim().startsWith(PLACEHOLDER_PREFIX);
 }
 
-export type Testimonial = {
-  quote: string;
-  name: string;
-  location?: string;
-  project?: string;
-};
-
 export const site = {
   name: "Unity Renovations",
   legalName: "Unity Renovations Inc.",
@@ -56,9 +49,6 @@ export const site = {
   licensing: "[ADD: licences, insurance and WSIB coverage]",
   warranty: "[ADD: workmanship warranty terms]",
 
-  // No testimonials were published on the old site. The testimonials section on the
-  // home page stays hidden until at least one real testimonial is added here.
-  testimonials: [] as Testimonial[],
 } as const;
 
 /**

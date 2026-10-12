@@ -14,7 +14,7 @@ Marketing site for Unity Renovations Inc. Built with Next.js 14 (App Router), Ty
 
 Search the codebase for `[ADD:` to find every placeholder that still needs real information.
 
-- **Testimonials:** the home page section stays hidden until at least one entry is added to `site.testimonials`.
+- **Testimonials:** add real reviews to `lib/testimonials.ts`. The home page section stays hidden while that list is empty.
 
 ## Contact form
 
