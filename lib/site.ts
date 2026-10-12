@@ -53,7 +53,6 @@ export const site = {
     href: "https://www.instagram.com/unityrenovations/",
   },
 
-  yearsInBusiness: "[ADD: years in business]",
   licensing: "[ADD: licences, insurance and WSIB coverage]",
   warranty: "[ADD: workmanship warranty terms]",
 
@@ -61,6 +60,14 @@ export const site = {
   // home page stays hidden until at least one real testimonial is added here.
   testimonials: [] as Testimonial[],
 } as const;
+
+/**
+ * Whole years since the company was founded. Never hardcode this number:
+ * use <YearsInBusiness /> in components so it stays current without a rebuild.
+ */
+export function getYearsInBusiness(date: Date = new Date()): number {
+  return date.getFullYear() - site.foundedYear;
+}
 
 export const nav = [
   { href: "/services", label: "Services" },

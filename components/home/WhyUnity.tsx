@@ -2,6 +2,8 @@ import Image from "next/image";
 import type { ComponentType, SVGProps } from "react";
 import { promises, type PromiseKey } from "@/lib/content";
 import { heroPhotos } from "@/lib/photos";
+import { site } from "@/lib/site";
+import { YearsInBusiness } from "@/components/YearsInBusiness";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -32,7 +34,25 @@ export function WhyUnity() {
             intro="Quality is never traded for the bottom line or a deadline. Here’s what you can count on, whether we’re finishing a basement or building a home from the ground up."
           />
         </Reveal>
-        <ul className="mt-14 grid gap-px overflow-hidden rounded-sm bg-white/10 sm:grid-cols-2 lg:mr-[22%] lg:grid-cols-3">
+        <Reveal>
+          <dl className="mt-12 grid max-w-3xl gap-8 border-y border-white/15 py-8 sm:grid-cols-3">
+            <div>
+              <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-dark">Founded</dt>
+              <dd className="mt-2 font-display text-4xl">{site.foundedYear}</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-dark">Years in business</dt>
+              <dd className="mt-2 font-display text-4xl">
+                <YearsInBusiness />+
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-dark">Serving</dt>
+              <dd className="mt-2 text-lg leading-snug">{site.serviceCities.join(" · ")}</dd>
+            </div>
+          </dl>
+        </Reveal>
+        <ul className="mt-12 grid gap-px overflow-hidden rounded-sm bg-white/10 sm:grid-cols-2 lg:mr-[22%] lg:grid-cols-3">
           {promises.map((p, i) => {
             const Icon = icons[p.key];
             return (

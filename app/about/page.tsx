@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { pageMetadata } from "@/lib/metadata";
 import Image from "next/image";
 import { heroPhotos } from "@/lib/photos";
@@ -8,6 +9,7 @@ import subfloor from "@/public/images/projects/subfloor-glued-and-screwed.jpg";
 import floorProtection from "@/public/images/projects/dust-floor-protection-staircase.jpg";
 import wainscotingDetail from "@/public/images/projects/wainscoting-light-switch-detail.jpg";
 import { PageHero } from "@/components/PageHero";
+import { YearsInBusiness } from "@/components/YearsInBusiness";
 import { CtaBand } from "@/components/CtaBand";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
@@ -19,11 +21,18 @@ export const metadata: Metadata = pageMetadata({
   path: "/about",
 });
 
-const facts = [
+const facts: { label: string; value: ReactNode }[] = [
   { label: "Founded", value: String(site.foundedYear) },
   { label: "Service area", value: site.serviceAreaLine },
   { label: "Estimates", value: "Free" },
-  { label: "In business", value: site.yearsInBusiness },
+  {
+    label: "In business",
+    value: (
+      <>
+        <YearsInBusiness />+ years
+      </>
+    ),
+  },
   { label: "Licensing & insurance", value: site.licensing },
 ];
 
@@ -49,7 +58,8 @@ export default function AboutPage() {
             <SectionHeading eyebrow="Our story" title={<span id="story-heading">A different approach to renovating</span>} />
             <div className="mt-6 space-y-4 text-lg leading-relaxed text-muted">
               <p>
-                Unity Renovations was founded in {site.foundedYear} and is run by its founder, {site.founder}. Our company
+                Unity Renovations was founded in {site.foundedYear} and is run by its founder, {site.founder}. That&rsquo;s{" "}
+                <YearsInBusiness />+ years of building it right. Our company
                 takes a different approach to rebuilding, remodelling and reconstruction. Whether it&rsquo;s a
                 small functional change or a dramatic cosmetic transformation, complete transparency through every stage
                 of the work is essential to us.

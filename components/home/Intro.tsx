@@ -5,6 +5,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
+import { YearsInBusiness } from "@/components/YearsInBusiness";
+import { site } from "@/lib/site";
 
 export function Intro() {
   return (
@@ -29,6 +31,9 @@ export function Intro() {
               </>
             }
           />
+          <p className="mt-8 border-l-2 border-accent pl-4 font-display text-xl text-ink">
+            Founded in {site.foundedYear} — <YearsInBusiness />+ years of building it right.
+          </p>
           <ButtonLink href="/about" variant="outline" className="mt-9">
             About our approach <ArrowRightIcon />
           </ButtonLink>
