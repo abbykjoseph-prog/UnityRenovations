@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useReducer, useRef, type ComponentType, type ReactNode, type SVGProps } from "react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { useEffect, useReducer, useRef, useState, type ComponentType, type ReactNode, type SVGProps } from "react";
 import {
   budgetRanges,
   formatPhone,
@@ -18,6 +19,7 @@ import {
   type StepId,
 } from "@/lib/inquiry";
 import { site } from "@/lib/site";
+import { TURNSTILE_FIELD, turnstileSiteKey } from "@/lib/turnstile-config";
 import { buttonClasses } from "@/components/ui/Button";
 import { ArrowLeftIcon, ArrowRightIcon, ChatIcon, CheckIcon, HomeIcon, InstagramIcon, MailIcon, PhoneIcon } from "@/components/ui/Icons";
 import { initialInquiryState, inquiryReducer } from "./inquiryReducer";
@@ -90,7 +92,7 @@ export function InquiryStepper() {
   const choose = (patch: Partial<InquiryData>) => act({ type: "choose", patch });
   const update = (patch: Partial<InquiryData>) => dispatch({ type: "update", patch });
 
-  async function send() {
+  async function send(turnstileToken: string) {
     act({ type: "submitStart" });
     try {
       const res = await fetch("/api/contact", {
@@ -100,11 +102,14 @@ export function InquiryStepper() {
           ...toPayload(data),
           [HONEYPOT_FIELD]: honeypotRef.current?.value ?? "",
           startedAt: startedAt.current,
+          [TURNSTILE_FIELD]: turnstileToken,
         }),
       });
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; errors?: Record<string, string> };
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; errors?: Record<string, string> };
       if (res.ok && json.ok) return act({ type: "submitSuccess" });
       if (json.errors) return act({ type: "serverErrors", errors: json.errors });
+      if (json.error === "verification-failed") return act({ type: "submitError", reason: "verification" });
+      if (json.error === "verification-unavailable") return act({ type: "submitError", reason: "unavailable" });
       act({ type: "submitError" });
     } catch {
       act({ type: "submitError" });
@@ -361,6 +366,7 @@ export function InquiryStepper() {
             <Review
               data={data}
               status={status}
+              errorReason={state.errorReason}
               onEdit={(s) => act({ type: "edit", step: s })}
               onSend={send}
             />
@@ -482,14 +488,32 @@ function TextStep({
 function Review({
   data,
   status,
+  errorReason,
   onEdit,
   onSend,
 }: {
   data: InquiryData;
   status: "idle" | "submitting" | "success" | "error";
+  errorReason: "verification" | "unavailable" | "general" | null;
   onEdit: (step: StepId) => void;
-  onSend: () => void;
+  onSend: (turnstileToken: string) => void;
 }) {
+  // Cloudflare Turnstile bot check: Send stays disabled until it returns a token
+  const turnstileRef = useRef<TurnstileInstance>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [checkMessage, setCheckMessage] = useState<string | null>(null);
+
+  const restartCheck = (message: string | null) => {
+    setToken(null);
+    setCheckMessage(message);
+    turnstileRef.current?.reset();
+  };
+
+  // Tokens can only be used once, so get a fresh one after any failed send
+  useEffect(() => {
+    if (status === "error") restartCheck(null);
+  }, [status]);
+
   const rows: { label: string; value: string; step: StepId }[] = [
     { label: "Reason", value: data.path === "project" ? "I have a project in mind" : "I need to reach you", step: "path" },
   ];
@@ -537,16 +561,63 @@ function Review({
 
       {status === "error" && (
         <div role="alert" className="mt-6 rounded-sm border border-red-700/40 bg-red-50 p-4 text-red-900">
-          Sorry, we couldn&rsquo;t send your message just now. Your answers are saved, so please try again. You can
-          also call us at{" "}
-          <a href={site.phoneHref} className="font-semibold underline">
-            {site.phone}
-          </a>
-          .
+          {errorReason === "verification" ? (
+            <>We couldn&rsquo;t confirm you&rsquo;re not a bot. Your answers are saved, so please complete the check below and send again.</>
+          ) : errorReason === "unavailable" ? (
+            <>Our online form is temporarily unavailable. Your answers are saved, but the quickest way to reach us right now is</>
+          ) : (
+            <>Sorry, we couldn&rsquo;t send your message just now. Your answers are saved, so please try again. You can also</>
+          )}
+          {errorReason !== "verification" && (
+            <>
+              {" "}
+              call{" "}
+              <a href={site.phoneHref} className="font-semibold underline">
+                {site.phone}
+              </a>{" "}
+              or email{" "}
+              <a href={`mailto:${site.email}`} className="font-semibold underline">
+                {site.email}
+              </a>
+              .
+            </>
+          )}
         </div>
       )}
 
-      <p className="mt-6 text-sm text-muted">
+      <div className="mt-8">
+        {turnstileSiteKey ? (
+          <Turnstile
+            ref={turnstileRef}
+            siteKey={turnstileSiteKey}
+            options={{ theme: "auto", size: "compact", refreshExpired: "manual" }}
+            onSuccess={(t) => {
+              setToken(t);
+              setCheckMessage(null);
+            }}
+            onExpire={() => restartCheck("The security check timed out. Please complete it again.")}
+            onError={() => restartCheck("The security check didn’t load properly. We’ve reset it, so please try again.")}
+            onTimeout={() => restartCheck("The security check timed out. Please complete it again.")}
+          />
+        ) : (
+          <p className="rounded-sm border border-ink/15 bg-white p-4 text-sm">
+            Online sending is temporarily unavailable. Please call{" "}
+            <a href={site.phoneHref} className="font-semibold underline">
+              {site.phone}
+            </a>{" "}
+            or email{" "}
+            <a href={`mailto:${site.email}`} className="font-semibold underline">
+              {site.email}
+            </a>
+            .
+          </p>
+        )}
+        <p className="mt-2 min-h-[1.25rem] text-sm text-red-700" aria-live="polite">
+          {checkMessage}
+        </p>
+      </div>
+
+      <p className="mt-4 text-sm text-muted">
         By sending, you agree to our{" "}
         <Link href="/privacy" className="font-medium text-accent-dark underline underline-offset-4 hover:text-ink">
           Privacy Policy
@@ -556,13 +627,19 @@ function Review({
 
       <button
         type="button"
-        onClick={onSend}
-        disabled={status === "submitting"}
+        onClick={() => token && onSend(token)}
+        disabled={status === "submitting" || !token}
+        aria-describedby={!token ? "send-hint" : undefined}
         className={buttonClasses("primary", "lg", "mt-4 w-full sm:w-auto")}
       >
         {status === "submitting" ? "Sending…" : status === "error" ? "Try again" : "Send"}
         {status !== "submitting" && <ArrowRightIcon />}
       </button>
+      {!token && status !== "submitting" && turnstileSiteKey && (
+        <p id="send-hint" className="mt-2 text-sm text-muted">
+          Complete the security check above to send.
+        </p>
+      )}
     </div>
   );
 }

@@ -72,7 +72,7 @@ const sections: LegalSection[] = [
     title: "Who processes it for us",
     content: (
       <>
-        <p>We use two trusted service providers to run this website:</p>
+        <p>We use a few trusted service providers to run this website:</p>
         <ul>
           <li>
             <strong>Vercel</strong> hosts the website. Like any web host, it processes basic technical information
@@ -80,6 +80,11 @@ const sections: LegalSection[] = [
           </li>
           <li>
             <strong>Resend</strong> delivers contact form submissions to our inbox by email.
+          </li>
+          <li>
+            <strong>Cloudflare Turnstile</strong> protects our contact form from spam and bots. To check that a real
+            person is sending the form, it may process technical information such as your IP address and browser
+            details. It&rsquo;s used only for this purpose, not for advertising or tracking.
           </li>
         </ul>
         <p>

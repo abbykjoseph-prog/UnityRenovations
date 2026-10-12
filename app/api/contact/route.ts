@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { HONEYPOT_FIELD } from "@/lib/inquiry";
 import { formatInquiryEmail, parseInquiry } from "@/lib/inquiry-schema";
+import { clientIp, verifyTurnstile } from "@/lib/turnstile";
+import { TURNSTILE_FIELD } from "@/lib/turnstile-config";
 
 const MAX_BODY_BYTES = 20_000;
 // Submissions faster than this are almost certainly bots
@@ -27,6 +29,16 @@ export async function POST(request: Request) {
   if (honeypot || tooFast) {
     console.warn("[contact] Discarded likely spam submission", { honeypot, tooFast });
     return NextResponse.json({ ok: true });
+  }
+
+  // Bot check: verify the Cloudflare Turnstile token before anything else is processed or sent
+  const turnstile = await verifyTurnstile(body[TURNSTILE_FIELD], clientIp(request));
+  if (!turnstile.ok) {
+    console.warn("[contact] Turnstile verification failed", { reason: turnstile.reason, codes: turnstile.codes });
+    if (turnstile.reason === "not-configured") {
+      return NextResponse.json({ ok: false, error: "verification-unavailable" }, { status: 503 });
+    }
+    return NextResponse.json({ ok: false, error: "verification-failed" }, { status: 400 });
   }
 
   const result = parseInquiry(body);
