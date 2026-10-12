@@ -2,15 +2,7 @@
  * Single source of truth for Unity Renovations' business details.
  *
  * Details come from the previous site (unityrenovations.ca) and from the owner.
- * Anything still unknown is marked with "[ADD: ...]".
- * Search this file for "[ADD:" to find every value that still needs to be filled in.
  */
-
-export const PLACEHOLDER_PREFIX = "[ADD:";
-
-export function isPlaceholder(value: string | undefined | null): boolean {
-  return !value || value.trim().startsWith(PLACEHOLDER_PREFIX);
-}
 
 export const site = {
   name: "Unity Renovations",
@@ -45,10 +37,6 @@ export const site = {
     handle: "@unityrenovations",
     href: "https://www.instagram.com/unityrenovations/",
   },
-
-  licensing: "[ADD: licences, insurance and WSIB coverage]",
-  warranty: "[ADD: workmanship warranty terms]",
-
 } as const;
 
 /**

@@ -12,8 +12,6 @@ Marketing site for Unity Renovations Inc. Built with Next.js 14 (App Router), Ty
 | Project photos, captions and categories | `lib/photos.ts`, images in `public/images/` |
 | Contact steps: project types, budget ranges, timelines, validation | `lib/inquiry.ts` (server schema in `lib/inquiry-schema.ts`) |
 
-Search the codebase for `[ADD:` to find every placeholder that still needs real information.
-
 - **Testimonials:** add real reviews to `lib/testimonials.ts`. The home page section stays hidden while that list is empty.
 
 ## Contact form

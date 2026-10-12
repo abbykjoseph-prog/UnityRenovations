@@ -33,7 +33,6 @@ const facts: { label: string; value: ReactNode }[] = [
       </>
     ),
   },
-  { label: "Licensing & insurance", value: site.licensing },
 ];
 
 const details = [
@@ -67,10 +66,6 @@ export default function AboutPage() {
               <p>
                 Keeping clients informed and comfortable creates a healthy working relationship, one where you can share
                 your opinions and concerns at any moment, so we reach the right outcome together.
-              </p>
-              <p className="rounded-sm border border-dashed border-accent/60 bg-paper-100 p-4 text-base text-ink">
-                [ADD: optional, a few lines on why Nick started Unity Renovations and any notable projects or
-                milestones]
               </p>
             </div>
           </Reveal>
