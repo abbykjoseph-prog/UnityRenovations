@@ -93,15 +93,15 @@ export const heroPhotos = {
 
 /** Every project photo, featured shots first. */
 export const projectPhotos: Photo[] = [
-  heroPhotos.finishedLivingSpace,
-  heroPhotos.cedarGableCanopy,
   heroPhotos.livingRoomPanelMoulding,
-  heroPhotos.rearDeckGlassRailing,
-  heroPhotos.cedarSecondStoreyAddition,
-  heroPhotos.cofferedCeiling,
   heroPhotos.kitchenNavyIsland,
-  heroPhotos.basementFraming,
+  heroPhotos.cedarSecondStoreyAddition,
+  heroPhotos.rearDeckGlassRailing,
   heroPhotos.loftTimberBeamsSkylights,
+  heroPhotos.cedarGableCanopy,
+  heroPhotos.cofferedCeiling,
+  heroPhotos.finishedLivingSpace,
+  heroPhotos.basementFraming,
   heroPhotos.interiorFraming,
   { src: p_dustFloorProtectionStaircase, alt: "Dust and floor protection in place", category: "interiors" },
   { src: p_dustFloorProtectionHallway, alt: "Dust and floor protection in place", category: "interiors" },
