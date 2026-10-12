@@ -33,7 +33,10 @@ export function Header() {
       className={`sticky top-0 z-40 transition-[background-color,box-shadow,color] duration-300 ${
         transparent
           ? "on-dark bg-gradient-to-b from-ink/60 to-transparent text-white"
-          : "bg-paper/95 text-ink shadow-[0_1px_0_rgba(20,22,27,0.08)] backdrop-blur supports-[backdrop-filter]:bg-paper/85"
+          : menuOpen
+            ? // No backdrop-filter here: it would become the containing block for the fixed menu panel
+              "on-dark bg-ink text-white"
+            : "bg-paper/95 text-ink shadow-[0_1px_0_rgba(20,22,27,0.08)] backdrop-blur supports-[backdrop-filter]:bg-paper/85"
       }`}
     >
       <a
@@ -45,7 +48,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-site items-center gap-3 px-4 sm:px-6 lg:h-20 lg:px-8">
         <Link href="/" className="mr-auto shrink-0" aria-label={`${site.name} home`}>
           <Image
-            src={transparent ? logoLight : logo}
+            src={transparent || menuOpen ? logoLight : logo}
             alt={site.legalName}
             priority
             sizes="180px"
@@ -87,7 +90,7 @@ export function Header() {
           href={site.phoneHref}
           aria-label={`Call ${site.name} at ${site.phone}`}
           className={`grid h-10 w-10 place-items-center rounded-full border text-lg lg:hidden ${
-            transparent ? "border-white/50" : "border-ink/20"
+            transparent || menuOpen ? "border-white/50" : "border-ink/20"
           }`}
         >
           <PhoneIcon />
