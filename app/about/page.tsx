@@ -15,12 +15,13 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export const metadata: Metadata = pageMetadata({
   title: "About Us",
-  description: `${site.legalName} is a renovation and construction company serving the ${site.serviceArea}, built on flawless workmanship, quality materials and respect for every client's home.`,
+  description: `${site.legalName} is a renovation and construction company founded in ${site.foundedYear} and operated by ${site.founder}. ${site.serviceAreaLine}.`,
   path: "/about",
 });
 
 const facts = [
-  { label: "Service area", value: site.serviceArea },
+  { label: "Founded", value: String(site.foundedYear) },
+  { label: "Service area", value: site.serviceAreaLine },
   { label: "Estimates", value: "Free" },
   { label: "In business", value: site.yearsInBusiness },
   { label: "Licensing & insurance", value: site.licensing },
@@ -32,19 +33,13 @@ const details = [
   { src: wainscotingDetail, caption: "Wainscoting detail fitted around a light switch" },
 ];
 
-// Names from the business cards on the old site. Roles were not published.
-const team = [
-  { name: "Nick Joseph", role: "[ADD: role]" },
-  { name: "Jordan Precaj", role: "[ADD: role]" },
-];
-
 export default function AboutPage() {
   return (
     <>
       <PageHero
         eyebrow="About us"
         title="Built on quality. Run on respect."
-        intro={`${site.legalName} handles construction, renovation and remodelling across the ${site.serviceArea}, from small functional changes to homes built from the foundation up.`}
+        intro={`${site.legalName} handles construction, renovation and remodelling across Toronto, Mississauga, Brampton and Hamilton, from small functional changes to homes built from the foundation up.`}
         image={heroPhotos.loftTimberBeamsSkylights.src}
       />
 
@@ -54,7 +49,8 @@ export default function AboutPage() {
             <SectionHeading eyebrow="Our story" title={<span id="story-heading">A different approach to renovating</span>} />
             <div className="mt-6 space-y-4 text-lg leading-relaxed text-muted">
               <p>
-                Our company takes a different approach to rebuilding, remodelling and reconstruction. Whether it&rsquo;s a
+                Unity Renovations was founded in {site.foundedYear} and is run by its founder, {site.founder}. Our company
+                takes a different approach to rebuilding, remodelling and reconstruction. Whether it&rsquo;s a
                 small functional change or a dramatic cosmetic transformation, complete transparency through every stage
                 of the work is essential to us.
               </p>
@@ -63,7 +59,7 @@ export default function AboutPage() {
                 your opinions and concerns at any moment, so we reach the right outcome together.
               </p>
               <p className="rounded-sm border border-dashed border-accent/60 bg-paper-100 p-4 text-base text-ink">
-                [ADD: company history, such as when and why Unity Renovations was founded, who leads it, and notable
+                [ADD: optional, a few lines on why Nick started Unity Renovations and any notable projects or
                 milestones]
               </p>
             </div>
@@ -78,13 +74,15 @@ export default function AboutPage() {
                 </div>
               ))}
             </dl>
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              {team.map((person) => (
-                <div key={person.name} className="rounded-sm bg-paper-200 p-5">
-                  <p className="font-display text-xl">{person.name}</p>
-                  <p className="mt-1 text-sm text-muted">{person.role}</p>
-                </div>
-              ))}
+            <div className="on-dark mt-8 rounded-sm bg-ink p-6 text-paper">
+              <p className="font-display text-2xl">{site.founderLine}</p>
+              <p className="mt-2 text-muted-dark">
+                Call Nick directly at{" "}
+                <a href={site.phoneHref} className="font-semibold text-white underline underline-offset-4">
+                  {site.phone}
+                </a>
+                .
+              </p>
             </div>
           </Reveal>
         </Container>

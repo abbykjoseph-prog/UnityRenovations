@@ -16,7 +16,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 
 export const metadata: Metadata = pageMetadata({
-  title: `${site.name} | Renovations & Custom Builds in the ${site.serviceArea}`,
+  title: `${site.name} | Renovations & Custom Builds in Toronto & the ${site.serviceRegion}`,
   description: site.description,
   path: "/",
 });

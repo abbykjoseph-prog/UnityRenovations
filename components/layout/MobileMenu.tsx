@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { nav, site } from "@/lib/site";
 import { MailIcon, PhoneIcon } from "@/components/ui/Icons";
+import { InstagramLink } from "@/components/InstagramLink";
 
 type Props = { open: boolean; onClose: () => void; pathname: string };
 
@@ -83,6 +84,7 @@ export function MobileMenu({ open, onClose, pathname }: Props) {
           <a href={`mailto:${site.email}`} className="flex items-center gap-3 break-all">
             <MailIcon className="shrink-0 text-accent-light" /> {site.email}
           </a>
+          <InstagramLink showHandle iconClassName="shrink-0 text-accent-light" />
         </div>
         <Link
           href="/contact"

@@ -22,7 +22,7 @@ const sans = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | Renovations & Custom Builds in the ${site.serviceArea}`,
+    default: `${site.name} | Renovations & Custom Builds in Toronto & the ${site.serviceRegion}`,
     template: `%s | ${site.name}`,
   },
   description: site.description,

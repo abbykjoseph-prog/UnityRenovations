@@ -6,7 +6,7 @@ Marketing site for Unity Renovations Inc. Built with Next.js 14 (App Router), Ty
 
 | What | Where |
 | --- | --- |
-| Phone, email, service area, hours, address, social links, testimonials | `lib/site.ts` |
+| Phone, email, founder, founded year, service area, hours, Instagram | `lib/site.ts` |
 | Service descriptions and "what's included" lists | `lib/services.ts` (names in `lib/service-list.ts`) |
 | Core promises and the five-step process | `lib/content.ts` |
 | Project photos, captions and categories | `lib/photos.ts`, images in `public/images/` |
@@ -15,8 +15,6 @@ Marketing site for Unity Renovations Inc. Built with Next.js 14 (App Router), Ty
 Search the codebase for `[ADD:` to find every placeholder that still needs real information.
 
 - **Testimonials:** the home page section stays hidden until at least one entry is added to `site.testimonials`.
-- **Social links:** footer icons appear once `site.social` has entries.
-- **Structured data:** placeholder values are left out of the JSON-LD automatically.
 
 ## Contact form
 

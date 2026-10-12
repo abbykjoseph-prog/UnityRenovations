@@ -10,6 +10,7 @@ import { nav, site } from "@/lib/site";
 import { ButtonLink } from "@/components/ui/Button";
 import { MenuIcon, CloseIcon, PhoneIcon } from "@/components/ui/Icons";
 import { MobileMenu } from "./MobileMenu";
+import { InstagramLink } from "@/components/InstagramLink";
 
 export function Header() {
   const pathname = usePathname();
@@ -77,9 +78,13 @@ export function Header() {
           </ul>
         </nav>
 
+        <InstagramLink
+          className="hidden h-10 w-10 justify-center rounded-full text-xl transition-opacity hover:opacity-70 lg:ml-2 lg:inline-flex"
+        />
+
         <a
           href={site.phoneHref}
-          className="hidden items-center gap-2 px-3 text-[0.95rem] font-semibold lg:ml-2 lg:inline-flex"
+          className="hidden items-center gap-2 px-3 text-[0.95rem] font-semibold lg:inline-flex"
         >
           <PhoneIcon className="text-lg" />
           {site.phone}

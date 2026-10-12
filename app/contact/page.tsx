@@ -5,11 +5,11 @@ import { site } from "@/lib/site";
 import { PageHero } from "@/components/PageHero";
 import { QuoteForm } from "@/components/contact/QuoteForm";
 import { Container } from "@/components/ui/Container";
-import { ClockIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
+import { ClockIcon, InstagramIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact Us for a Free Quote",
-  description: `Request a free renovation or construction estimate from ${site.name}. Call ${site.phone} or send us the details of your project. Serving the ${site.serviceArea}.`,
+  description: `Request a free renovation or construction estimate from ${site.name}. Call ${site.phone} or send us the details of your project. ${site.serviceAreaLine}.`,
   path: "/contact",
 });
 
@@ -37,20 +37,18 @@ export default function ContactPage() {
               <h2 id="contact-details-heading" className="text-2xl font-medium">
                 Prefer to talk?
               </h2>
-              <p className="mt-2 text-muted-dark">Call or email us directly.</p>
+              <p className="mt-2 text-muted-dark">Call or email us directly. {site.founderLine}.</p>
 
               <ul className="mt-8 space-y-6">
-                {site.contacts.map((c) => (
-                  <li key={c.name} className="flex gap-4">
-                    <PhoneIcon className="mt-1 shrink-0 text-xl text-accent-light" />
-                    <div>
-                      <p className="text-sm text-muted-dark">{c.name}</p>
-                      <a href={c.phoneHref} className="text-lg font-semibold hover:underline">
-                        {c.phone}
-                      </a>
-                    </div>
-                  </li>
-                ))}
+                <li className="flex gap-4">
+                  <PhoneIcon className="mt-1 shrink-0 text-xl text-accent-light" />
+                  <div>
+                    <p className="text-sm text-muted-dark">Phone ({site.founder})</p>
+                    <a href={site.phoneHref} className="text-lg font-semibold hover:underline">
+                      {site.phone}
+                    </a>
+                  </div>
+                </li>
                 <li className="flex gap-4">
                   <MailIcon className="mt-1 shrink-0 text-xl text-accent-light" />
                   <div className="min-w-0">
@@ -64,7 +62,22 @@ export default function ContactPage() {
                   <PinIcon className="mt-1 shrink-0 text-xl text-accent-light" />
                   <div>
                     <p className="text-sm text-muted-dark">Service area</p>
-                    <p className="text-lg font-semibold">{site.serviceArea}</p>
+                    <p className="text-lg font-semibold">{site.serviceAreaLine}</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <InstagramIcon className="mt-1 shrink-0 text-xl text-accent-light" />
+                  <div>
+                    <p className="text-sm text-muted-dark">Instagram</p>
+                    <a
+                      href={site.instagram.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-lg font-semibold hover:underline"
+                    >
+                      {site.instagram.handle}
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
                   </div>
                 </li>
                 <li className="flex gap-4">

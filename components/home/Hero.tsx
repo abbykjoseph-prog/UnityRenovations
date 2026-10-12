@@ -79,7 +79,7 @@ export function Hero() {
       <div className="relative mx-auto flex min-h-[640px] max-w-site flex-col justify-end px-4 pb-16 pt-32 sm:px-6 sm:pb-20 lg:h-[100svh] lg:max-h-[980px] lg:min-h-[720px] lg:px-8 lg:pb-24">
         <p className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-accent-light">
           <span aria-hidden="true" className="h-px w-8 bg-accent-light" />
-          Renovation &amp; construction · {site.serviceArea}
+          {site.serviceAreaLine}
         </p>
         <h1
           id="hero-heading"

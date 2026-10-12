@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = pageMetadata({
   title: "Projects",
-  description: `Photos of kitchens, bathrooms, additions, finish carpentry, exterior and commercial work by ${site.name} across the ${site.serviceArea}.`,
+  description: `Photos of kitchens, bathrooms, additions, finish carpentry, exterior and commercial work by ${site.name}. ${site.serviceAreaLine}.`,
   path: "/projects",
 });
 

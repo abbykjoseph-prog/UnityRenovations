@@ -1,21 +1,11 @@
-import { isPlaceholder, site } from "@/lib/site";
+import { site } from "@/lib/site";
 import { serviceList } from "@/lib/service-list";
 
 /**
  * GeneralContractor (a LocalBusiness subtype) structured data, built from lib/site.ts.
- * Placeholder values ("[ADD: ...]") are left out automatically until they are filled in.
+ * Unity Renovations is a service-area business with no office, so no address is published.
  */
 export function LocalBusinessJsonLd() {
-  const { address } = site;
-  const postalAddress = {
-    "@type": "PostalAddress",
-    ...(!isPlaceholder(address.street) && { streetAddress: address.street }),
-    ...(!isPlaceholder(address.city) && { addressLocality: address.city }),
-    addressRegion: address.region,
-    ...(!isPlaceholder(address.postalCode) && { postalCode: address.postalCode }),
-    addressCountry: address.country,
-  };
-
   const data = {
     "@context": "https://schema.org",
     "@type": "GeneralContractor",
@@ -26,17 +16,14 @@ export function LocalBusinessJsonLd() {
     url: site.url,
     logo: `${site.url}/images/logo.png`,
     image: `${site.url}/og-image.jpg`,
-    telephone: "+1-905-510-5929",
+    telephone: site.phoneHref.replace("tel:", ""),
     email: site.email,
-    address: postalAddress,
-    areaServed: { "@type": "AdministrativeArea", name: site.serviceArea },
-    contactPoint: site.contacts.map((c) => ({
-      "@type": "ContactPoint",
-      name: c.name,
-      telephone: c.phoneHref.replace("tel:", ""),
-      contactType: "sales",
-      areaServed: "CA",
-      availableLanguage: "English",
+    foundingDate: String(site.foundedYear),
+    founder: { "@type": "Person", name: site.founder },
+    areaServed: site.serviceCities.map((city) => ({
+      "@type": "City",
+      name: city,
+      containedInPlace: { "@type": "AdministrativeArea", name: "Ontario, Canada" },
     })),
     hasOfferCatalog: {
       "@type": "OfferCatalog",
@@ -46,8 +33,7 @@ export function LocalBusinessJsonLd() {
         itemOffered: { "@type": "Service", name: s.title, url: `${site.url}/services#${s.slug}` },
       })),
     },
-    ...(site.social.length > 0 && { sameAs: site.social.map((s) => s.href) }),
-    ...(!isPlaceholder(site.foundedYear) && { foundingDate: site.foundedYear }),
+    sameAs: [site.instagram.href],
   };
 
   return (

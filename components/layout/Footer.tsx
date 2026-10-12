@@ -4,6 +4,7 @@ import logoLight from "@/public/images/logo-light.png";
 import { nav, site } from "@/lib/site";
 import { services } from "@/lib/services";
 import { Container } from "@/components/ui/Container";
+import { InstagramLink } from "@/components/InstagramLink";
 import { MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
 
 export function Footer() {
@@ -16,17 +17,7 @@ export function Footer() {
           {/* Line from the old site footer */}
           <p className="mt-6 max-w-sm leading-relaxed text-muted-dark">Working hard to make your space beautiful.</p>
           <p className="mt-3 text-sm text-muted-dark">{site.serviceHighlights.join(" · ")}</p>
-          {site.social.length > 0 && (
-            <ul className="mt-6 flex gap-4 text-sm">
-              {site.social.map((s) => (
-                <li key={s.href}>
-                  <a href={s.href} className="text-paper/80 hover:text-white" rel="noopener noreferrer" target="_blank">
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
+          <p className="mt-6 font-display text-lg text-paper">{site.founderLine}</p>
         </div>
 
         <div className="lg:col-span-2">
@@ -77,7 +68,14 @@ export function Footer() {
             </li>
             <li className="flex items-start gap-3 text-paper/85">
               <PinIcon className="mt-1 shrink-0 text-accent-light" />
-              <span>Serving the {site.serviceArea}</span>
+              <span>{site.serviceAreaLine}</span>
+            </li>
+            <li>
+              <InstagramLink
+                showHandle
+                className="items-start text-paper/85 hover:text-white"
+                iconClassName="mt-1 shrink-0 text-accent-light"
+              />
             </li>
           </ul>
         </div>
@@ -86,7 +84,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <Container className="flex flex-col gap-2 py-6 text-sm text-muted-dark sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {site.legalName}. All rights reserved.
+            © {year} {site.legalName} All rights reserved.
           </p>
           <p>{site.tagline}</p>
         </Container>

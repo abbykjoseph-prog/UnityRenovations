@@ -15,7 +15,7 @@ import { CalendarIcon, LedgerIcon } from "@/components/ui/Icons";
 
 export const metadata: Metadata = pageMetadata({
   title: "Renovation & Construction Services",
-  description: `Basement finishing, kitchen and bathroom remodels, whole-home renovations, additions, rebuilds and custom homes built from the foundation up, across the ${site.serviceArea}.`,
+  description: `Basement finishing, kitchen and bathroom remodels, whole-home renovations, additions, rebuilds and custom homes built from the foundation up. ${site.serviceAreaLine}.`,
   path: "/services",
 });
 
