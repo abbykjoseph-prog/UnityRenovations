@@ -502,11 +502,31 @@ function Review({
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [token, setToken] = useState<string | null>(null);
   const [checkMessage, setCheckMessage] = useState<string | null>(null);
+  // Errors such as a misconfigured key or domain repeat forever, so only auto-reset a couple of times
+  const errorCount = useRef(0);
+  const [checkBlocked, setCheckBlocked] = useState(false);
 
   const restartCheck = (message: string | null) => {
     setToken(null);
     setCheckMessage(message);
     turnstileRef.current?.reset();
+  };
+
+  const handleCheckError = () => {
+    errorCount.current += 1;
+    if (errorCount.current <= 2) {
+      restartCheck("The security check didn’t load properly. We’ve reset it, so please try again.");
+      return;
+    }
+    setToken(null);
+    setCheckBlocked(true);
+    setCheckMessage(null);
+  };
+
+  const retryCheck = () => {
+    errorCount.current = 0;
+    setCheckBlocked(false);
+    restartCheck(null);
   };
 
   // Tokens can only be used once, so get a fresh one after any failed send
@@ -592,11 +612,12 @@ function Review({
             siteKey={turnstileSiteKey}
             options={{ theme: "auto", size: "compact", refreshExpired: "manual" }}
             onSuccess={(t) => {
+              errorCount.current = 0;
               setToken(t);
               setCheckMessage(null);
             }}
             onExpire={() => restartCheck("The security check timed out. Please complete it again.")}
-            onError={() => restartCheck("The security check didn’t load properly. We’ve reset it, so please try again.")}
+            onError={handleCheckError}
             onTimeout={() => restartCheck("The security check timed out. Please complete it again.")}
           />
         ) : (
@@ -612,9 +633,27 @@ function Review({
             .
           </p>
         )}
-        <p className="mt-2 min-h-[1.25rem] text-sm text-red-700" aria-live="polite">
-          {checkMessage}
-        </p>
+        <div className="mt-2 min-h-[1.25rem] text-sm" aria-live="polite">
+          {checkBlocked ? (
+            <p className="text-red-700">
+              The security check isn&rsquo;t loading right now.{" "}
+              <button type="button" onClick={retryCheck} className="font-semibold underline underline-offset-4">
+                Try again
+              </button>
+              , or call{" "}
+              <a href={site.phoneHref} className="font-semibold underline">
+                {site.phone}
+              </a>{" "}
+              or email{" "}
+              <a href={`mailto:${site.email}`} className="font-semibold underline">
+                {site.email}
+              </a>
+              .
+            </p>
+          ) : (
+            checkMessage && <p className="text-red-700">{checkMessage}</p>
+          )}
+        </div>
       </div>
 
       <p className="mt-4 text-sm text-muted">
