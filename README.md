@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Unity Renovations website
 
-## Getting Started
+Marketing site for Unity Renovations Inc. Built with Next.js 14 (App Router), TypeScript and Tailwind CSS, and deployed to Vercel from `main`.
 
-First, run the development server:
+## Editing content
+
+| What | Where |
+| --- | --- |
+| Phone, email, service area, hours, address, social links, testimonials | `lib/site.ts` |
+| Service descriptions and "what's included" lists | `lib/services.ts` (names in `lib/service-list.ts`) |
+| Core promises and the five-step process | `lib/content.ts` |
+| Project photos, captions and categories | `lib/photos.ts`, images in `public/images/` |
+| Quote form options (budget ranges, timelines) | `lib/quote.ts` |
+
+Search the codebase for `[ADD:` to find every placeholder that still needs real information.
+
+- **Testimonials:** the home page section stays hidden until at least one entry is added to `site.testimonials`.
+- **Social links:** footer icons appear once `site.social` has entries.
+- **Structured data:** placeholder values are left out of the JSON-LD automatically.
+
+## Contact form
+
+`app/api/contact/route.ts` validates submissions, filters spam (honeypot plus minimum fill time) and logs each request to the server logs. There's a `TODO(email)` in that file with the steps for sending through Resend.
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm run build` must pass with no type or lint errors before you push.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Setting `NEXT_DIST_DIR` writes build output to a different folder, so a second dev server or a test build doesn't overwrite the main `.next` folder:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+NEXT_DIST_DIR=.next-build npm run build
+```
