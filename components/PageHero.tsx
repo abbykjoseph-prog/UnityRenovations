@@ -21,10 +21,10 @@ export function PageHero({ eyebrow, title, intro, image, children }: Props) {
         priority
         placeholder="blur"
         sizes="100vw"
-        className="object-cover opacity-40"
+        className="object-cover opacity-60"
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/30" aria-hidden="true" />
+      <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/75 to-ink/25" aria-hidden="true" />
       <Container className="relative py-20 sm:py-28 lg:py-32">
         <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-accent-light">
           <span aria-hidden="true" className="h-px w-8 bg-accent-light" />

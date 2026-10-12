@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 import { heroPhotos } from "@/lib/photos";
 import powderRoomAfter from "@/public/images/projects/powder-room-after.jpg";
+import { serviceInfo } from "@/lib/service-list";
 
 export type Service = {
   slug: string;
@@ -14,9 +15,7 @@ export type Service = {
 
 export const services: Service[] = [
   {
-    slug: "basement-renovations",
-    title: "Basement renovations & finishing",
-    shortTitle: "Basement renovations",
+    ...serviceInfo("basement-renovations"),
     summary: "Turn unused square footage into warm, bright living space that feels like the rest of your home.",
     description: [
       "A finished basement is one of the best ways to add usable space without changing your home's footprint. We plan the layout around how your family actually lives, whether that's a family room, a home office, a guest suite or a space for a growing teenager.",
@@ -33,9 +32,7 @@ export const services: Service[] = [
     image: heroPhotos.basementFraming,
   },
   {
-    slug: "kitchen-remodels",
-    title: "Kitchen remodels",
-    shortTitle: "Kitchen remodels",
+    ...serviceInfo("kitchen-remodels"),
     summary: "Custom cabinetry, countertops and layouts that make the heart of your home work harder and look better.",
     description: [
       "From a refresh of cabinets and counters to a full tear-out with a new island and layout, we build kitchens that are as practical as they are beautiful.",
@@ -52,9 +49,7 @@ export const services: Service[] = [
     image: heroPhotos.kitchenNavyIsland,
   },
   {
-    slug: "bathroom-remodels",
-    title: "Bathroom remodels",
-    shortTitle: "Bathroom remodels",
+    ...serviceInfo("bathroom-remodels"),
     summary: "Ensuites, main baths and powder rooms finished with clean lines and tile work that lasts.",
     description: [
       "Bathrooms have to stand up to water, steam and everyday use, so there's no room for shortcuts. We build them properly from the studs out, then finish them with the tile, fixtures and details you've chosen.",
@@ -71,9 +66,7 @@ export const services: Service[] = [
     image: { src: powderRoomAfter, alt: "Renovated powder room with a vessel sink vanity and white tile floor" },
   },
   {
-    slug: "whole-home-renovations",
-    title: "Whole-home renovations",
-    shortTitle: "Whole-home renovations",
+    ...serviceInfo("whole-home-renovations"),
     summary: "Open up layouts, upgrade finishes and bring every room up to the same high standard.",
     description: [
       "A whole-home renovation lets you rethink how the house flows: removing walls to open up a main floor, adding architectural detail, and carrying one consistent level of finish from room to room.",
@@ -90,9 +83,7 @@ export const services: Service[] = [
     image: heroPhotos.livingRoomPanelMoulding,
   },
   {
-    slug: "additions",
-    title: "Additions & extensions",
-    shortTitle: "Additions & extensions",
+    ...serviceInfo("additions"),
     summary: "More room for your family without leaving the neighbourhood you love.",
     description: [
       "When you need more space, an addition can be the best of both worlds: you keep your location and gain the square footage you need. We design additions to tie seamlessly into the existing home, inside and out.",
@@ -108,9 +99,7 @@ export const services: Service[] = [
     image: heroPhotos.cedarSecondStoreyAddition,
   },
   {
-    slug: "rebuilds",
-    title: "Rebuilds",
-    shortTitle: "Rebuilds",
+    ...serviceInfo("rebuilds"),
     summary: "When a cosmetic refresh won't cut it, we take the space back to the structure and rebuild it right.",
     description: [
       "Some spaces need more than new finishes. Whether it's an outdated layout, past damage or work that wasn't done properly the first time, we take it back to the framing and rebuild it to a standard you can trust.",
@@ -126,9 +115,7 @@ export const services: Service[] = [
     image: heroPhotos.interiorFraming,
   },
   {
-    slug: "custom-homes",
-    title: "Custom home builds: from the foundation up",
-    shortTitle: "Custom home builds",
+    ...serviceInfo("custom-homes"),
     summary: "A home built around your plans and your lifestyle, from the foundation to the final finishes.",
     description: [
       "Building a custom home is a big decision, and it deserves a builder who treats it that way. We work with you from the earliest planning conversations through the foundation, framing and building envelope, all the way to the finishing details.",
