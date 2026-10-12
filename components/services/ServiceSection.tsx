@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
+import { QUOTE_HREF } from "@/lib/inquiry";
 
 export function ServiceSection({ service, index }: { service: Service; index: number }) {
   const flip = index % 2 === 1;
@@ -51,7 +52,7 @@ export function ServiceSection({ service, index }: { service: Service; index: nu
             ))}
           </ul>
 
-          <ButtonLink href={`/contact?service=${service.slug}`} className="mt-9">
+          <ButtonLink href={`${QUOTE_HREF}&type=${service.slug}`} className="mt-9">
             Get a quote for {service.shortTitle.toLowerCase()} <ArrowRightIcon />
           </ButtonLink>
         </Reveal>

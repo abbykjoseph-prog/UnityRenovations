@@ -8,9 +8,11 @@ import logo from "@/public/images/logo.png";
 import logoLight from "@/public/images/logo-light.png";
 import { nav, site } from "@/lib/site";
 import { ButtonLink } from "@/components/ui/Button";
+import { containerClasses } from "@/components/ui/Container";
 import { MenuIcon, CloseIcon, PhoneIcon } from "@/components/ui/Icons";
 import { MobileMenu } from "./MobileMenu";
 import { InstagramLink } from "@/components/InstagramLink";
+import { QUOTE_HREF } from "@/lib/inquiry";
 
 export function Header() {
   const pathname = usePathname();
@@ -46,7 +48,7 @@ export function Header() {
       >
         Skip to content
       </a>
-      <div className="mx-auto flex h-16 max-w-site items-center gap-3 px-4 sm:px-6 lg:h-20 lg:px-8">
+      <div className={`${containerClasses} flex h-16 items-center gap-3 lg:h-20`}>
         <Link href="/" className="mr-auto shrink-0" aria-label={`${site.name} home`}>
           <Image
             src={transparent || menuOpen ? logoLight : logo}
@@ -101,7 +103,7 @@ export function Header() {
           <PhoneIcon />
         </a>
 
-        <ButtonLink href="/contact" size="md" className="!px-3.5 !py-2.5 sm:!px-5 sm:!py-3">
+        <ButtonLink href={QUOTE_HREF} size="md" className="!px-3.5 !py-2.5 sm:!px-5 sm:!py-3">
           Get a Quote
         </ButtonLink>
 

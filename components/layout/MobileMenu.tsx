@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { nav, site } from "@/lib/site";
 import { MailIcon, PhoneIcon } from "@/components/ui/Icons";
 import { InstagramLink } from "@/components/InstagramLink";
+import { QUOTE_HREF } from "@/lib/inquiry";
 
 type Props = { open: boolean; onClose: () => void; pathname: string };
 
@@ -58,7 +59,7 @@ export function MobileMenu({ open, onClose, pathname }: Props) {
       hidden={!open}
       className="on-dark fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-ink text-paper lg:hidden"
     >
-      <nav aria-label="Mobile" className="px-6 pb-10 pt-6">
+      <nav aria-label="Mobile" className="px-5 pb-10 pt-6 sm:px-8">
         <ul className="divide-y divide-white/10 border-b border-white/10">
           <li>
             <Link href="/" aria-current={pathname === "/" ? "page" : undefined} className="block py-4 font-display text-3xl">
@@ -87,7 +88,7 @@ export function MobileMenu({ open, onClose, pathname }: Props) {
           <InstagramLink showHandle iconClassName="shrink-0 text-accent-light" />
         </div>
         <Link
-          href="/contact"
+          href={QUOTE_HREF}
           className="mt-10 flex w-full items-center justify-center rounded-sm bg-accent px-6 py-4 font-semibold text-white"
         >
           Get a Free Quote

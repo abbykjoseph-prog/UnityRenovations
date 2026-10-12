@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { PhoneIcon } from "@/components/ui/Icons";
+import { QUOTE_HREF } from "@/lib/inquiry";
 
 type Props = { title?: string; body?: string };
 
@@ -28,7 +29,7 @@ export function CtaBand({
           <h2 className="text-4xl font-medium leading-tight tracking-tight sm:text-5xl">{title}</h2>
           <p className="mt-5 text-lg leading-relaxed text-white/85">{body}</p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-            <ButtonLink href="/contact" size="lg">
+            <ButtonLink href={QUOTE_HREF} size="lg">
               Get a Free Quote
             </ButtonLink>
             <a href={site.phoneHref} className="inline-flex items-center gap-2 px-1 py-2 text-lg font-semibold hover:underline">

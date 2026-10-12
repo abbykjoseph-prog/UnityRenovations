@@ -10,7 +10,7 @@ Marketing site for Unity Renovations Inc. Built with Next.js 14 (App Router), Ty
 | Service descriptions and "what's included" lists | `lib/services.ts` (names in `lib/service-list.ts`) |
 | Core promises and the five-step process | `lib/content.ts` |
 | Project photos, captions and categories | `lib/photos.ts`, images in `public/images/` |
-| Quote form options (budget ranges, timelines) | `lib/quote.ts` |
+| Contact steps: project types, budget ranges, timelines, validation | `lib/inquiry.ts` (server schema in `lib/inquiry-schema.ts`) |
 
 Search the codebase for `[ADD:` to find every placeholder that still needs real information.
 
@@ -18,7 +18,7 @@ Search the codebase for `[ADD:` to find every placeholder that still needs real 
 
 ## Contact form
 
-`app/api/contact/route.ts` validates submissions, filters spam (honeypot plus minimum fill time) and logs each request to the server logs. There's a `TODO(email)` in that file with the steps for sending through Resend.
+The contact page is a step-by-step module (`components/contact/InquiryStepper.tsx`). Link to `/contact?path=project` to open it on the project questions (add `&type=kitchen` etc. to preselect a project type). `app/api/contact/route.ts` validates submissions with zod, filters spam (honeypot plus minimum fill time) and logs a formatted email (subject and body) to the server logs. There's a `TODO(email)` in that file with the steps for sending through Resend.
 
 ## Development
 

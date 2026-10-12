@@ -5,7 +5,9 @@ import { useCallback, useEffect, useState } from "react";
 import { heroPhotos, type Photo } from "@/lib/photos";
 import { site } from "@/lib/site";
 import { ButtonLink } from "@/components/ui/Button";
+import { containerClasses } from "@/components/ui/Container";
 import { PauseIcon, PlayIcon } from "@/components/ui/Icons";
+import { QUOTE_HREF } from "@/lib/inquiry";
 
 const slides: Photo[] = [
   heroPhotos.livingRoomPanelMoulding,
@@ -81,7 +83,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(20,22,27,0.5)_0%,rgba(20,22,27,0.48)_70%,rgba(20,22,27,0.35)_88%,rgba(20,22,27,0.2)_100%)] lg:hidden" />
       </div>
 
-      <div className="relative flex min-h-[640px] flex-col justify-end px-5 pb-14 pt-32 sm:px-8 sm:pb-16 lg:min-h-[clamp(720px,100svh,980px)] lg:pt-36 lg:px-12 lg:pb-20 xl:px-16">
+      <div className={`${containerClasses} relative flex min-h-[640px] flex-col justify-end pb-14 pt-32 sm:pb-16 lg:min-h-[clamp(720px,100svh,980px)] lg:pb-20 lg:pt-36`}>
         <div className="max-w-3xl [text-shadow:0_0_3px_rgba(0,0,0,0.85),0_0_6px_rgba(0,0,0,0.6),0_0_18px_rgba(0,0,0,0.4)] lg:max-w-[min(40rem,42vw)]">
           <p className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-white">
             <span aria-hidden="true" className="h-px w-8 bg-accent-light" />
@@ -98,7 +100,7 @@ export function Hero() {
             and a schedule and budget we stand behind.
           </p>
           <div className="mt-9 flex flex-col gap-3 [text-shadow:none] sm:flex-row sm:items-center">
-            <ButtonLink href="/contact" size="lg">
+            <ButtonLink href={QUOTE_HREF} size="lg">
               Get a Free Quote
             </ButtonLink>
             <ButtonLink href="/services" size="lg" variant="outline-light" className="bg-ink/30 backdrop-blur-[2px]">

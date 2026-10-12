@@ -3,13 +3,14 @@ import { pageMetadata } from "@/lib/metadata";
 import { heroPhotos } from "@/lib/photos";
 import { site } from "@/lib/site";
 import { PageHero } from "@/components/PageHero";
-import { QuoteForm } from "@/components/contact/QuoteForm";
+import { Suspense } from "react";
+import { InquiryStepper } from "@/components/contact/InquiryStepper";
 import { Container } from "@/components/ui/Container";
 import { ClockIcon, InstagramIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact Us for a Free Quote",
-  description: `Request a free renovation or construction estimate from ${site.name}. Call ${site.phone} or send us the details of your project. ${site.serviceAreaLine}.`,
+  title: "Contact Us",
+  description: `Get in touch with ${site.name} or tell us about your project for a free estimate. Call ${site.phone}. ${site.serviceAreaLine}.`,
   path: "/contact",
 });
 
@@ -19,17 +20,30 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Let’s talk about your project"
-        intro="Tell us what you have in mind and we’ll get back to you to arrange a consultation. Estimates are always free."
+        intro="A few quick questions and we’ll be in touch within 1 business day. Estimates are always free."
         image={heroPhotos.kitchenNavyIsland.src}
       />
 
       <section className="py-16 sm:py-24">
         <Container className="grid gap-14 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
-            <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">Request a free quote</h2>
-            <div className="mt-8">
-              <QuoteForm />
-            </div>
+            {/* useSearchParams (for ?path=project) needs a Suspense boundary on a static page */}
+            <Suspense
+              fallback={
+                <div className="rounded-sm bg-paper-100 p-6 ring-1 ring-ink/10 sm:p-10">
+                  <p className="text-3xl font-medium sm:text-4xl">How can we help?</p>
+                  <p className="mt-4 text-muted">
+                    Loading… You can also call us at{" "}
+                    <a href={site.phoneHref} className="font-semibold text-ink underline">
+                      {site.phone}
+                    </a>
+                    .
+                  </p>
+                </div>
+              }
+            >
+              <InquiryStepper />
+            </Suspense>
           </div>
 
           <aside aria-labelledby="contact-details-heading" className="lg:col-span-5">
