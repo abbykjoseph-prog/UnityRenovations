@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { site } from "@/lib/site";
+import { DEFAULT_OG_TITLE } from "@/lib/metadata";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LocalBusinessJsonLd } from "@/components/seo/LocalBusinessJsonLd";
@@ -28,6 +29,15 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  // Defaults for any page that doesn't set its own (share image comes from app/opengraph-image.tsx)
+  openGraph: {
+    type: "website",
+    locale: "en_CA",
+    siteName: site.name,
+    title: DEFAULT_OG_TITLE,
+    description: site.description,
+  },
+  twitter: { card: "summary_large_image", title: DEFAULT_OG_TITLE, description: site.description },
 };
 
 export const viewport: Viewport = {

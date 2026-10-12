@@ -8,7 +8,10 @@ export const site = {
   name: "Unity Renovations",
   legalName: "Unity Renovations Inc.",
   tagline: "Construction · Renovation · Remodelling",
-  url: "https://unityrenovations.ca",
+  // Used for metadataBase, canonical links, sitemap, robots and structured data.
+  // Set to the Vercel URL until unityrenovations.ca points at this site, then change it
+  // here or set NEXT_PUBLIC_SITE_URL in Vercel.
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://unity-renovations.vercel.app",
   description:
     "Renovation and construction company serving the GTA: Toronto, Mississauga, Brampton & Hamilton. From basement finishing and kitchen remodels to rebuilds and custom homes built from the foundation up, delivered on time and on budget.",
 
